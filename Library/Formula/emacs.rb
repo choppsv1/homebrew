@@ -12,6 +12,7 @@ class Emacs < Formula
   option "use-git-head", "Use Savannah (faster) git mirror for HEAD builds"
   option "keep-ctags", "Don't remove the ctags executable that emacs provides"
   option "japanese", "Patch for Japanese input methods"
+  option "true-color-term", "Enable true color (24-bit) terminal support"
 
   head do
     if build.include? "use-git-head"
@@ -53,6 +54,12 @@ class Emacs < Formula
       url "http://sourceforge.jp/projects/macemacsjp/scm/svn/blobs/583/inline_patch/trunk/emacs-inline.patch?export=raw"
       sha1 "61a6f41f3ddc9ecc3d7f57379b3dc195d7b9b5e2"
     end if build.include? "cocoa" and build.include? "japanese"
+
+    # Apply patch to support 24-bit colors in a terminal.
+    patch :p0 do
+      url "https://gist.githubusercontent.com/choppsv1/73d51cedd3e8ec72e1c1/raw/16bb6f0df749d6cf7777761924578d83279e2cda/emacs-24.3-24bit.diff"
+      sha1 "3e9bf8598e780660a0342e3d8878da6f2d4562de"
+    end if build.include? "true-color-term"
   end
 
   depends_on 'pkg-config' => :build
