@@ -12,6 +12,7 @@ class Emacs < Formula
   option "use-git-head", "Use Savannah (faster) git mirror for HEAD builds"
   option "keep-ctags", "Don't remove the ctags executable that emacs provides"
   option "japanese", "Patch for Japanese input methods"
+  option "true-color-term", "Enable true color (24-bit) terminal support"
 
   head do
     if build.include? "use-git-head"
@@ -19,6 +20,12 @@ class Emacs < Formula
     else
       url 'bzr://http://bzr.savannah.gnu.org/r/emacs/trunk'
     end
+
+    # Apply patch to support 24-bit colors in a terminal.
+    patch :p1 do
+      url "https://gist.githubusercontent.com/choppsv1/36aacdd696d505566088/raw/da53ae1aad49fef722f784fe7248fde3db2a7485/emacs-24.4-24bit.diff"
+      sha1 "6a52ea8c4ae2c685572492de563d5d3d7313fef7"
+    end if build.include? "true-color-term"
 
     depends_on :autoconf
     depends_on :automake
@@ -53,6 +60,12 @@ class Emacs < Formula
       url "http://sourceforge.jp/projects/macemacsjp/scm/svn/blobs/583/inline_patch/trunk/emacs-inline.patch?export=raw"
       sha1 "61a6f41f3ddc9ecc3d7f57379b3dc195d7b9b5e2"
     end if build.include? "cocoa" and build.include? "japanese"
+
+    # Apply patch to support 24-bit colors in a terminal.
+    patch :p0 do
+      url "https://gist.githubusercontent.com/choppsv1/73d51cedd3e8ec72e1c1/raw/883089aa8735298f923bd79a9c3bf52f1f0e422f/emacs-24.3-24bit.diff"
+      sha1 "df8cbaf2751218cba13ab7607a874cf1bf65df7f"
+    end if build.include? "true-color-term"
   end
 
   depends_on 'pkg-config' => :build
